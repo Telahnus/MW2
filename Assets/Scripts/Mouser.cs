@@ -10,7 +10,8 @@ public class Mouser : MonoBehaviour {
 			Debug.DrawLine (ray.origin, hit.point);
 			if (Input.GetMouseButtonDown(0)){
 				Tile t = hit.collider.GetComponent<Tile>();
-				print (t.coord);
+				//print (t.coord+" "+t.dir[1]);
+				print (t.coord+" "+t.neighbours.Count);
 			}
 		}
 	}
