@@ -4,13 +4,14 @@ using System.Collections;
 public class HexGraph : MonoBehaviour {
 
 	public GameObject hex;
+
 	public int rows;
 	public int cols;
 
 	private float hexWidth;
 	private float hexHeight;
 
-	private System.Random rand = new System.Random();
+	//private System.Random rand = new System.Random();
 
 	void setSizes()
 	{
@@ -31,22 +32,12 @@ public class HexGraph : MonoBehaviour {
 				GO.transform.parent=this.transform;
 				Tile t = GO.GetComponent<Tile>();
 				t.coord = new Vector2(x,y);
-				int type = rand.Next (1, 4);
-				switch(type)
-				{
-					case 1:
-						GO.renderer.material.color = Color.green;
-						break;
-					case 2:
-						GO.renderer.material.color = Color.red;
-						break;
-					case 3:
-						GO.renderer.material.color = Color.blue;
-						break;
-				}
+				t.setInitialType();
 			}
 		}
 	}
+
+
 
 	void Start()
 	{
