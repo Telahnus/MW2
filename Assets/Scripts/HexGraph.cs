@@ -5,7 +5,10 @@ using System.Collections.Generic;
 public class HexGraph : MonoBehaviour {
 
 	public GameObject hex;
-	public int maxPlayers;
+
+	public int numPlayers;
+	public bool addNeutral;
+	private int maxPlayers;
 	public int rows;
 	public int cols;
 
@@ -17,28 +20,64 @@ public class HexGraph : MonoBehaviour {
 
 	//private System.Random rand = new System.Random();
 
+	//determine size of hex
 	void setSizes()
 	{
 		hexWidth = hex.renderer.bounds.size.x;
 		hexHeight = hex.renderer.bounds.size.z;
 	}
 
-	void createGrid()
-	{
-		for (int y=0; y<rows; y++) 
-		{
+	//create grid and initialize tiles
+	void createGrid(){
+		for (int y=0; y<rows; y++) {
 			float offset = 0;
-			if (y%2!=0) offset = hexHeight/2;
-			for (int x=0; x<cols; x++)
-			{
+			if (y%2!=0) offset = hexHeight/2; //offset the odd rows
+			for (int x=0; x<cols; x++){
 				Vector3 pos = new Vector3(y*hexWidth*3/4,0,x*hexHeight+offset);
 				GameObject GO = (GameObject)Instantiate (hex, pos, Quaternion.identity);
-				GO.transform.parent=this.transform;
-				Tile t = GO.GetComponent<Tile>();
+				GO.transform.parent=this.transform; //attach new hexes to map object in scene
+				Tile t = GO.GetComponent<Tile>(); 
 				Vector2 key = new Vector2(x,y);
-				t.initialize (key,maxPlayers+1);
+				//t.initialize (key,maxPlayers+1);
+				t.neighbours = new List<GameObject>();
+				t.coord = key;
+				setDir (t);
+				//randomly assign Landtypes
+				int type = Random.Range (1, 11);
+				if (type < 3) // 20% trees
+					t.setType (LandType.Trees);
+				else if (type == 3) // 10% meadows
+					t.setType (LandType.Meadow);
+				else
+					t.setType (LandType.Grass);  
+				//setOwner/color here
+					//randomly generate number
+					//then call setOwner with param
+						//tile will recolor itself and set its owner
 				map.Add (key, GO);
 			}
+		}
+	}
+
+	//set directions (aka coordinates) of neighbours
+	void setDir(Tile t)
+	{
+		//tile coords = x,y
+		t.dir = new Vector2[6];
+		if (t.coord.y % 2 == 0) {
+			t.dir [0] = new Vector2 (t.coord.x + 1, t.coord.y);
+			t.dir [1] = new Vector2 (t.coord.x, t.coord.y - 1);
+			t.dir [2] = new Vector2 (t.coord.x - 1, t.coord.y - 1);
+			t.dir [3] = new Vector2 (t.coord.x - 1, t.coord.y);
+			t.dir [4] = new Vector2 (t.coord.x - 1, t.coord.y + 1);
+			t.dir [5] = new Vector2 (t.coord.x, t.coord.y + 1);
+		} else {
+			t.dir [0] = new Vector2 (t.coord.x + 1, t.coord.y);
+			t.dir [1] = new Vector2 (t.coord.x + 1, t.coord.y - 1);
+			t.dir [2] = new Vector2 (t.coord.x, t.coord.y - 1);
+			t.dir [3] = new Vector2 (t.coord.x - 1, t.coord.y);
+			t.dir [4] = new Vector2 (t.coord.x, t.coord.y + 1);
+			t.dir [5] = new Vector2 (t.coord.x + 1, t.coord.y + 1);
 		}
 	}
 
@@ -101,12 +140,16 @@ public class HexGraph : MonoBehaviour {
 	{
 		map = new Hashtable();
 		villages = new List<Village>();
+		maxPlayers = numPlayers;
+		if (addNeutral)
+			maxPlayers++;
 		setSizes ();
 		createGrid ();
 		setNeighbours ();
+		//remove outside tiles here
 		initializeRegions ();
 		removeRegions ();
-		print (villages.Count);
+		//print (villages.Count);
 	}
 
 }

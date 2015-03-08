@@ -25,42 +25,20 @@ public class Tile : MonoBehaviour {
 	{
 		neighbours = new List<GameObject>();
 		coord = xy;
-		setDir ();
-		setInitialType ();
+		//setDir ();
+		//setInitialType ();
 		setInitialColor (maxPlayers);
 		isChecked = false;
 	}
 
-	//set directions (aka coordinates) of neighbours
-	public void setDir()
-	{
-		//tile coords = x,y
-		dir = new Vector2[6];
-		if (coord.y % 2 == 0) {
-			dir [0] = new Vector2 (coord.x + 1, coord.y);
-			dir [1] = new Vector2 (coord.x, coord.y - 1);
-			dir [2] = new Vector2 (coord.x - 1, coord.y - 1);
-			dir [3] = new Vector2 (coord.x - 1, coord.y);
-			dir [4] = new Vector2 (coord.x - 1, coord.y + 1);
-			dir [5] = new Vector2 (coord.x, coord.y + 1);
-		} else {
-			dir [0] = new Vector2 (coord.x + 1, coord.y);
-			dir [1] = new Vector2 (coord.x + 1, coord.y - 1);
-			dir [2] = new Vector2 (coord.x, coord.y - 1);
-			dir [3] = new Vector2 (coord.x - 1, coord.y);
-			dir [4] = new Vector2 (coord.x, coord.y + 1);
-			dir [5] = new Vector2 (coord.x + 1, coord.y + 1);
-		}
-	}
-
 	//randomly assign landtype and add decoration
-	public void setInitialType()
+	public void setType(LandType type)
 	{	
-		int type = Random.Range (1, 11);
 		GameObject GO;
 		Vector3 scale;
-		if (type < 3) // 20% trees
+		switch (type) 
 		{
+		case LandType.Grass:
 			GO = (GameObject)Instantiate (tree, transform.position, Quaternion.identity); //instantiate decoration
 			scale = GO.transform.localScale; //save scaling
 			GO.transform.parent = this.transform; //set parent tile
@@ -68,9 +46,8 @@ public class Tile : MonoBehaviour {
 			GO.transform.localScale = scale; //rescale the decoration
 			GO.transform.eulerAngles = new Vector3(0,Random.Range (0,360),0); //give it a random rotation
 			myType = LandType.Trees; //set the landtype attribute
-		} 
-		else if (type == 3) // 10% meadows
-		{
+			break;
+		case LandType.Meadow:
 			GO = (GameObject)Instantiate (meadow, transform.position, Quaternion.identity);
 			scale = GO.transform.localScale;
 			GO.transform.parent = this.transform;
@@ -78,10 +55,10 @@ public class Tile : MonoBehaviour {
 			GO.transform.localScale = scale;
 			GO.transform.eulerAngles = new Vector3(0,Random.Range (0,360),0);
 			myType = LandType.Meadow;
-		}
-		else
-		{	
+			break;
+		case LandType.Grass:
 			myType = LandType.Grass;
+			break;
 		}
 	}
 
