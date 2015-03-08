@@ -7,11 +7,6 @@ public class Village : MonoBehaviour {
 	public List<GameObject> region;
 	public GameObject owner;
 	public int myColor;
-	/*
-	void Start()
-	{
-		region = new List<GameObject> ();
-	}*/
 
 	public void setOwner(GameObject p)
 	{

@@ -22,17 +22,7 @@ public class Tile : MonoBehaviour {
 	public Village myVillage;
 	//private System.Random rand = new System.Random();
 
-	public void initialize(Vector2 xy, int maxPlayers)
-	{
-		neighbours = new List<GameObject>();
-		coord = xy;
-		//setDir ();
-		//setInitialType ();
-		//setInitialColor (maxPlayers);
-		isChecked = false;
-	}
-
-	//randomly assign landtype and add decoration
+	//assign landtype and add decoration
 	public void setType(LandType type)
 	{	
 		GameObject GO;
