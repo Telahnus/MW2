@@ -27,7 +27,7 @@ public class Tile : MonoBehaviour {
 		coord = xy;
 		//setDir ();
 		//setInitialType ();
-		setInitialColor (maxPlayers);
+		//setInitialColor (maxPlayers);
 		isChecked = false;
 	}
 
@@ -38,7 +38,7 @@ public class Tile : MonoBehaviour {
 		Vector3 scale;
 		switch (type) 
 		{
-		case LandType.Grass:
+		case LandType.Trees:
 			GO = (GameObject)Instantiate (tree, transform.position, Quaternion.identity); //instantiate decoration
 			scale = GO.transform.localScale; //save scaling
 			GO.transform.parent = this.transform; //set parent tile
@@ -63,9 +63,8 @@ public class Tile : MonoBehaviour {
 	}
 
 	//randomly assign a color based on max number of players
-	public void setInitialColor(int maxPlayers)
+	public void setColor(int color)
 	{
-		int color = Random.Range (1, maxPlayers+1);
 		myColor = color; //set tile's color attribute
 		switch (color) {
 		case 1:

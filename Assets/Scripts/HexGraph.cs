@@ -38,10 +38,13 @@ public class HexGraph : MonoBehaviour {
 				GO.transform.parent=this.transform; //attach new hexes to map object in scene
 				Tile t = GO.GetComponent<Tile>(); 
 				Vector2 key = new Vector2(x,y);
-				//t.initialize (key,maxPlayers+1);
+
+				//initialize the tile and it's list of neighbours
 				t.neighbours = new List<GameObject>();
+				t.isChecked = false;
 				t.coord = key;
 				setDir (t);
+
 				//randomly assign Landtypes
 				int type = Random.Range (1, 11);
 				if (type < 3) // 20% trees
@@ -50,10 +53,15 @@ public class HexGraph : MonoBehaviour {
 					t.setType (LandType.Meadow);
 				else
 					t.setType (LandType.Grass);  
+
 				//setOwner/color here
-					//randomly generate number
-					//then call setOwner with param
-						//tile will recolor itself and set its owner
+				maxPlayers = numPlayers;
+				if (addNeutral) //add extra neutral space
+					maxPlayers++;
+				int color = Random.Range (1, maxPlayers+1);
+				t.setColor (color);
+
+				//finally add tile to map listing
 				map.Add (key, GO);
 			}
 		}
@@ -140,9 +148,6 @@ public class HexGraph : MonoBehaviour {
 	{
 		map = new Hashtable();
 		villages = new List<Village>();
-		maxPlayers = numPlayers;
-		if (addNeutral)
-			maxPlayers++;
 		setSizes ();
 		createGrid ();
 		setNeighbours ();
