@@ -19,6 +19,7 @@ public class Tile : MonoBehaviour {
 	public int myColor;
 	public LandType myType;
 	public bool isChecked;
+	public Village myVillage;
 	//private System.Random rand = new System.Random();
 
 	public void initialize(Vector2 xy, int maxPlayers)
