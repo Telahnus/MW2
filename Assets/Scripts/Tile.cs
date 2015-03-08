@@ -18,6 +18,7 @@ public class Tile : MonoBehaviour {
 	public GameObject meadow;
 	public int myColor;
 	public LandType myType;
+	public bool isChecked;
 	//private System.Random rand = new System.Random();
 
 	public void initialize(Vector2 xy, int maxPlayers)
@@ -27,6 +28,7 @@ public class Tile : MonoBehaviour {
 		setDir ();
 		setInitialType ();
 		setInitialColor (maxPlayers);
+		isChecked = false;
 	}
 
 	//set directions (aka coordinates) of neighbours
